@@ -8,7 +8,20 @@
 <th:block layout:fragment="css"/>
 
 <!-- index.html 고유 스크립트 추가 -->
-<th:block layout:fragment="script"/>
+<th:block layout:fragment="script">
+	<script src="/smarteditor2/js/service/HuskyEZCreator.js" charset="UTF-8"></script>
+	<script type="text/javascript">
+		var oEditors = [];
+		$(document).ready(function () {
+			nhn.husky.EZCreator.createInIFrame({
+				oAppRef: oEditors,
+				elPlaceHolder: 'weditor',
+				sSkinURI: "/smarteditor2/SmartEditor2Skin.html",
+				fCreator: "createSEditor2"
+			})
+		})
+	</script>
+</th:block>
 
 <div layout:fragment="content">
 
@@ -68,7 +81,7 @@
 					<div class="card-body">
 						<form>
 							<div class="form-group">
-								<textarea class="form-control" id="txt_post" rows="3" placeholder="What you're doing right now?"></textarea>
+								<textarea cols="3" name="weditor" id="weditor" rows="3" placeholder="What you're doing right now?"></textarea>
 							</div>
 							<div class="form-group">
 								<button class="btn btn-primary"><i class="fas fa-image" data-toggle="tooltip" data-placement="top" title="Upload an image"></i></button>
