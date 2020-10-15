@@ -2,6 +2,7 @@ package com.l2jong.se.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.h2.tools.Server;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Configuration
+@MapperScan(basePackages = "com.l2jong.se.dao")
 public class H2ServerConfiguration {
 	@Bean
 	public DataSource dataSource() throws SQLException {
