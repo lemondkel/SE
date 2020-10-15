@@ -1,4 +1,4 @@
-package com.example.demo.ctrl;
+package com.l2jong.se.ctrl;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
