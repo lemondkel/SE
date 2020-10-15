@@ -1,5 +1,6 @@
 package com.l2jong.se.config;
 
+import com.l2jong.se.repo.BrdRepository;
 import com.l2jong.se.repo.UsrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +17,9 @@ public class SEApplication {
 
 	@Autowired
 	private UsrRepository usrRepository;
+
+	@Autowired
+	private BrdRepository brdRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SEApplication.class, args);
