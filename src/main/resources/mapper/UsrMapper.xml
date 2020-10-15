@@ -8,4 +8,10 @@
 		SELECT 199
 		FROM DUAL
 	</select>
+
+	<insert id="insertUsr" parameterType="com.l2jong.se.vo.UsrVO">
+		INSERT INTO `SE_TB_USR`
+			(`NO`, `USER_ID`, `NICKNAME`, `CREATED_AT`, `UPDATED_AT`)
+		VALUES (#{no}, #{userId}, #{nickname}, NOW(), NULL)
+	</insert>
 </mapper>

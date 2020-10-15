@@ -18,4 +18,14 @@ public class MainController {
 		System.out.println(a);
 		return "main";
 	}
+
+	@RequestMapping("/login")
+	public String login() {
+		return "login";
+	}
+
+	@RequestMapping("/join")
+	public String join() {
+		return "join";
+	}
 }
