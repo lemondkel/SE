@@ -1,5 +1,6 @@
 package com.l2jong.se.dao;
 
+import com.l2jong.se.vo.BrdVO;
 import com.l2jong.se.vo.UsrVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -8,10 +9,8 @@ import java.util.List;
 
 @Repository
 @Mapper
-public interface UsrDao {
-	int getCount();
+public interface BrdDao {
+	List<BrdVO> selectBrdByPaging(BrdVO brdVO);
 
-	int insertUsr(UsrVO usrVO);
-
-	List<UsrVO> selectUsrByPaging(UsrVO usrVO);
+	int insertBrd(BrdVO brdVO);
 }

@@ -20,6 +20,7 @@ dependencies {
 	implementation 'org.springframework.session:spring-session-core'
 	implementation 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'com.google.code.gson:gson'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	compile 'com.h2database:h2'
 	compile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.0.1'

@@ -14,4 +14,19 @@
 			(`NO`, `USER_ID`, `NICKNAME`, `CREATED_AT`, `UPDATED_AT`)
 		VALUES (#{no}, #{userId}, #{nickname}, NOW(), NULL)
 	</insert>
+
+	<select id="selectUsrByPaging" parameterType="com.l2jong.se.vo.UsrVO" resultType="com.l2jong.se.vo.UsrVO">
+		<![CDATA[
+		SELECT *
+		FROM (
+				 SELECT /*+ INDEX_DESC(Z IDX_BRD_1) */ ROWNUM AS RNUM, Z.*
+				 FROM (
+						  SELECT `NO`, `USER_ID`, `NICKNAME`, `CREATED_AT`, `UPDATED_AT`
+						  FROM `SE_TB_USR`
+					  ) Z
+				 WHERE ROWNUM <= #{endRowNum}
+			 )
+		WHERE RNUM >= #{startRowNum}
+		]]>
+	</select>
 </mapper>

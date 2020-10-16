@@ -4,10 +4,10 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorator="layout/default-layout">
 
-<!-- index.html 고유 CSS 추가 -->
+<!-- main.html 고유 CSS 추가 -->
 <th:block layout:fragment="css"/>
 
-<!-- index.html 고유 스크립트 추가 -->
+<!-- main.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
 	<script src="/smarteditor2/js/service/HuskyEZCreator.js" charset="UTF-8"></script>
 	<script type="text/javascript">
@@ -18,12 +18,46 @@
 				elPlaceHolder: 'weditor',
 				sSkinURI: "/smarteditor2/SmartEditor2Skin.html",
 				fCreator: "createSEditor2"
-			})
-		})
+			});
+
+			getBrdPage($('#pageNo').val());
+		});
+
+		$('#insertBtn').on('click', function () {
+			oEditors.getById.weditor.exec("UPDATE_CONTENTS_FIELD", []);
+
+			if ($('#weditor').val() == "") {
+				alert("내용을 입력해주세요.");
+				return;
+			}
+
+		});
+
+		function getBrdPage(pageNo) {
+			$.ajax({
+				url: '/brd/get/' + pageNo,
+				method: 'GET',
+				dataType: "json",
+				beforeSend: function () {
+
+				},
+				success: function (data) {
+					console.log(data);
+					$('#pageNo').val(parseInt(pageNo) + 1);
+				},
+				complete: function () {
+
+				}
+			});
+		}
 	</script>
 </th:block>
 
 <div layout:fragment="content">
+
+	<form name="pagingForm" id="pagingForm">
+		<input type="hidden" name="pageNo" id="pageNo" value="1"/>
+	</form>
 
 	<div class="container-fluid mt-3">
 		<div class="row">
@@ -33,9 +67,12 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-12">
-								<img src="https://picsum.photos/200/200?image=718" class="rounded-circle position-absolute my-pic" width="70">
+								<img src="https://picsum.photos/200/200?image=718"
+									 class="rounded-circle position-absolute my-pic" width="70">
 								<h5 class="mb-0"><a href="#" class="text-body">Lorem Ipsum</a></h5>
-								<h5><a href="#" class="text-body"><small class="text-muted">@LoremIpsum</small></a></h5>
+								<h5><a href="#" class="text-body">
+									<small class="text-muted">@LoremIpsum</small>
+								</a></h5>
 							</div>
 							<div class="col-4 text-center">
 								<a href="#" class="text-body" data-toggle="tooltip" data-placement="top" title="Posts">
@@ -46,7 +83,8 @@
 								</a>
 							</div>
 							<div class="col-4 text-center">
-								<a href="#" class="text-body" data-toggle="tooltip" data-placement="top" title="Following">
+								<a href="#" class="text-body" data-toggle="tooltip" data-placement="top"
+								   title="Following">
                 <span class="fa-layers fa-2x">
                   <i class="fas fa-user-friends"></i>
                   <span class="fa-layers-counter bg-primary fa-layers-bottom-right">123</span>
@@ -54,7 +92,8 @@
 								</a>
 							</div>
 							<div class="col-4 text-center">
-								<a href="#" class="text-body" data-toggle="tooltip" data-placement="top" title="Followers">
+								<a href="#" class="text-body" data-toggle="tooltip" data-placement="top"
+								   title="Followers">
                 <span class="fa-layers fa-2x">
                   <i class="fas fa-user-plus"></i>
                   <span class="fa-layers-counter bg-primary fa-layers-bottom-right">789</span>
@@ -67,9 +106,15 @@
 				<div class="card shadow mb-3">
 					<div class="card-body">
 						<h5>What's hot</h5>
-						<p>Lorem Ipsum<br><small class="text-muted">987 Posts</small></p>
-						<p>Lorem Ipsum<br><small class="text-muted">654 Posts</small></p>
-						<p>Lorem Ipsum<br><small class="text-muted">321 Posts</small></p>
+						<p>Lorem Ipsum<br>
+							<small class="text-muted">987 Posts</small>
+						</p>
+						<p>Lorem Ipsum<br>
+							<small class="text-muted">654 Posts</small>
+						</p>
+						<p>Lorem Ipsum<br>
+							<small class="text-muted">321 Posts</small>
+						</p>
 					</div>
 					<div class="card-footer">
 						<a href="#">Find more</a>
@@ -79,14 +124,22 @@
 			<div class="col-md-6 order-3 order-md-2">
 				<div class="card shadow mb-3">
 					<div class="card-body">
-						<form>
+						<form id="postingForm" name="postingForm">
 							<div class="form-group">
-								<textarea cols="3" name="weditor" id="weditor" rows="3" placeholder="What you're doing right now?"></textarea>
+								<textarea cols="3" name="weditor" id="weditor" rows="3"
+										  placeholder="What you're doing right now?"></textarea>
 							</div>
 							<div class="form-group">
-								<button class="btn btn-primary"><i class="fas fa-image" data-toggle="tooltip" data-placement="top" title="Upload an image"></i></button>
-								<button class="btn btn-primary float-right"><i class="fas fa-comment"></i> Post</button>
-								<button class="btn btn-link float-right"><i class="fas fa-times"></i> Discard</button>
+								<button class="btn btn-primary" type="button"><i class="fas fa-image"
+																				 data-toggle="tooltip"
+																				 data-placement="top"
+																				 title="Upload an image"></i></button>
+								<button class="btn btn-primary float-right" id="insertBtn" type="button"><i
+										class="fas fa-comment"></i> Post
+								</button>
+								<button class="btn btn-link float-right" type="button"><i class="fas fa-times"></i>
+									Discard
+								</button>
 							</div>
 						</form>
 					</div>
@@ -95,12 +148,17 @@
 					<div class="card-body">
 						<div class="d-flex">
 							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="60">
+								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
+									 width="60">
 							</div>
 							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum <small class="text-muted">@LoremIpsum</small></a></h5>
+								<h5><a href="#">Lorem Ipsum
+									<small class="text-muted">@LoremIpsum</small>
+								</a></h5>
 								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 								</p>
 							</div>
 						</div>
@@ -110,12 +168,17 @@
 					<div class="card-body">
 						<div class="d-flex">
 							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="60">
+								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
+									 width="60">
 							</div>
 							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum <small class="text-muted">@LoremIpsum</small></a></h5>
+								<h5><a href="#">Lorem Ipsum
+									<small class="text-muted">@LoremIpsum</small>
+								</a></h5>
 								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 								</p>
 							</div>
 						</div>
@@ -125,12 +188,17 @@
 					<div class="card-body">
 						<div class="d-flex">
 							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="60">
+								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
+									 width="60">
 							</div>
 							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum <small class="text-muted">@LoremIpsum</small></a></h5>
+								<h5><a href="#">Lorem Ipsum
+									<small class="text-muted">@LoremIpsum</small>
+								</a></h5>
 								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 								</p>
 							</div>
 						</div>
@@ -140,12 +208,17 @@
 					<div class="card-body">
 						<div class="d-flex">
 							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="60">
+								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
+									 width="60">
 							</div>
 							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum <small class="text-muted">@LoremIpsum</small></a></h5>
+								<h5><a href="#">Lorem Ipsum
+									<small class="text-muted">@LoremIpsum</small>
+								</a></h5>
 								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 								</p>
 							</div>
 						</div>
@@ -155,12 +228,17 @@
 					<div class="card-body">
 						<div class="d-flex">
 							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="60">
+								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
+									 width="60">
 							</div>
 							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum <small class="text-muted">@LoremIpsum</small></a></h5>
+								<h5><a href="#">Lorem Ipsum
+									<small class="text-muted">@LoremIpsum</small>
+								</a></h5>
 								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 								</p>
 							</div>
 						</div>
@@ -185,14 +263,23 @@
 				<div class="card shadow mb-3">
 					<div class="card-body">
 						<h5>Recommended</h5>
-						<p><img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="40">
-							<a href="#">Lorem Ipsum <small class="text-muted">@LoremIpsum</small></a></p>
+						<p><img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
+								width="40">
+							<a href="#">Lorem Ipsum
+								<small class="text-muted">@LoremIpsum</small>
+							</a></p>
 						<hr>
-						<p><img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="40">
-							<a href="#">Lorem Ipsum <small class="text-muted">@LoremIpsum</small></a></p>
+						<p><img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
+								width="40">
+							<a href="#">Lorem Ipsum
+								<small class="text-muted">@LoremIpsum</small>
+							</a></p>
 						<hr>
-						<p><img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="40">
-							<a href="#">Lorem Ipsum <small class="text-muted">@LoremIpsum</small></a></p>
+						<p><img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
+								width="40">
+							<a href="#">Lorem Ipsum
+								<small class="text-muted">@LoremIpsum</small>
+							</a></p>
 					</div>
 					<div class="card-footer">
 						<a href="#">Find more</a>
@@ -203,7 +290,8 @@
 						&copy; 2018 Lorem Ipsum <a href="#">Dolor</a> <a href="#">Sit</a> <a href="#">Amet</a>
 					</div>
 					<div class="card-footer">
-						Languages <a href="#">English (UK)</a> <a href="#">English (US)</a> <a href="#">English (Aus)</a>
+						Languages <a href="#">English (UK)</a> <a href="#">English (US)</a> <a href="#">English
+						(Aus)</a>
 					</div>
 				</div>
 			</div>

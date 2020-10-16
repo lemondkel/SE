@@ -16,4 +16,8 @@ public class UsrVO {
 	private String nickname;
 	private Date createdAt;
 	private Date updatedAt;
+
+	private int pageNo;
+	private int startRowNum;
+	private int endRowNum;
 }

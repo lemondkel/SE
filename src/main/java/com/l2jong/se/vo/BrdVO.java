@@ -14,5 +14,9 @@ public class BrdVO {
 	private String title;
 	private String content;
 	private char delYn;
-	private String writeUserId;
+	private int writeUserNo;
+
+	private int pageNo;
+	private int startRowNum;
+	private int endRowNum;
 }

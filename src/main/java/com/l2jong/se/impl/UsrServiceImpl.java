@@ -6,6 +6,8 @@ import com.l2jong.se.vo.UsrVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsrServiceImpl implements UsrService {
 
@@ -20,5 +22,10 @@ public class UsrServiceImpl implements UsrService {
 	@Override
 	public int insertUsr(UsrVO usrVO) {
 		return usrDao.insertUsr(usrVO);
+	}
+
+	@Override
+	public List<UsrVO> selectUsrByPaging(UsrVO usrVO) {
+		return usrDao.selectUsrByPaging(usrVO);
 	}
 }

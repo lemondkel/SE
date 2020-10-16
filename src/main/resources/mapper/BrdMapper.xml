@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.l2jong.se.dao.BrdDao">
+	<insert id="insertBrd" parameterType="com.l2jong.se.vo.BrdVO">
+		INSERT INTO `SE_TB_BRD`
+		( `NO`
+		, `VIEW_TYPE`
+		, `TITLE`
+		, `CONTENT`
+		, `DEL_YN`
+		, `WRITE_USER_NO`
+		, `CREATED_AT`
+		, `UPDATED_AT`)
+		VALUES (#{no}, #{viewType}, #{title}, #{content}, 'N',
+				#{writeUserNo}, NOW(), NULL)
+	</insert>
+
+	<select id="selectBrdByPaging" parameterType="com.l2jong.se.vo.BrdVO" resultType="com.l2jong.se.vo.BrdVO">
+		<![CDATA[
+		SELECT *
+		FROM (
+				 SELECT /*+ INDEX_DESC(Z IDX_BRD_1) */ ROWNUM AS RNUM, Z.*
+				 FROM (
+						  SELECT `NO`
+							   , `VIEW_TYPE`
+							   , `TITLE`
+							   , `CONTENT`
+							   , `DEL_YN`
+							   , `WRITE_USER_NO`
+							   , `CREATED_AT`
+							   , `UPDATED_AT`
+						  FROM `SE_TB_BRD`
+					  ) Z
+				 WHERE ROWNUM <= #{endRowNum}
+			 )
+		WHERE RNUM >= #{startRowNum}
+		]]>
+	</select>
+</mapper>
