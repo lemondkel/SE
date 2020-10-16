@@ -28,5 +28,6 @@ public class AjaxResult {
 		this.result = result;
 		this.code = code;
 		this.message = message;
+		this.data = new HashMap<>();
 	}
 }

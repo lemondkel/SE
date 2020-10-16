@@ -8,34 +8,33 @@
 		INSERT INTO `SE_TB_BRD`
 		( `NO`
 		, `VIEW_TYPE`
-		, `TITLE`
 		, `CONTENT`
 		, `DEL_YN`
 		, `WRITE_USER_NO`
-		, `CREATED_AT`
-		, `UPDATED_AT`)
-		VALUES (#{no}, #{viewType}, #{title}, #{content}, 'N',
-				#{writeUserNo}, NOW(), NULL)
+		, `CREATED_AT`)
+		VALUES (BRD_SEQ.NEXTVAL, #{viewType}, #{content}, 'N',
+				#{writeUserNo}, FORMATDATETIME(NOW(), 'yyyyMMddHHmmss'))
 	</insert>
 
 	<select id="selectBrdByPaging" parameterType="com.l2jong.se.vo.BrdVO" resultType="com.l2jong.se.vo.BrdVO">
 		<![CDATA[
-		SELECT *
+		SELECT ZZ.*,
+			   B.USER_ID,
+			   B.NICKNAME,
+			   C.`CONTENT`,
+			   C.`CREATED_AT`
 		FROM (
 				 SELECT /*+ INDEX_DESC(Z IDX_BRD_1) */ ROWNUM AS RNUM, Z.*
 				 FROM (
-						  SELECT `NO`
-							   , `VIEW_TYPE`
-							   , `TITLE`
-							   , `CONTENT`
-							   , `DEL_YN`
-							   , `WRITE_USER_NO`
-							   , `CREATED_AT`
-							   , `UPDATED_AT`
+						  SELECT `NO`,
+								 `WRITE_USER_NO`
 						  FROM `SE_TB_BRD`
+						  ORDER BY `NO` DESC
 					  ) Z
 				 WHERE ROWNUM <= #{endRowNum}
-			 )
+			 ) ZZ
+				 INNER JOIN `SE_TB_USR` B ON ZZ.WRITE_USER_NO = B.NO
+				 INNER JOIN `SE_TB_BRD` C ON ZZ.NO = C.NO
 		WHERE RNUM >= #{startRowNum}
 		]]>
 	</select>

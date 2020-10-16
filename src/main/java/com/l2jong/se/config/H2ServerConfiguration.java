@@ -21,7 +21,7 @@ public class H2ServerConfiguration {
 	public DataSource dataSource() throws SQLException {
 		HikariDataSource hikariDataSource = new HikariDataSource();
 		hikariDataSource.setDriverClassName("org.h2.Driver");
-		hikariDataSource.setJdbcUrl("jdbc:h2:tcp://localhost:9092/~/sedb");
+		hikariDataSource.setJdbcUrl("jdbc:h2:tcp://localhost:9092/mem:sedb");
 		hikariDataSource.setUsername("se");
 		hikariDataSource.setPassword("1234");
 		Server.createTcpServer("-tcp",

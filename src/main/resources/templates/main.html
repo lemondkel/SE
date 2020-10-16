@@ -9,8 +9,11 @@
 
 <!-- main.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="/smarteditor2/js/service/HuskyEZCreator.js" charset="UTF-8"></script>
 	<script type="text/javascript">
+		var isPostEnd = false; // Post is ended status
+		var isPostIng = false; // Post is ing status
 		var oEditors = [];
 		$(document).ready(function () {
 			nhn.husky.EZCreator.createInIFrame({
@@ -21,6 +24,12 @@
 			});
 
 			getBrdPage($('#pageNo').val());
+
+			$(window).scroll(function() {
+				if ((parseInt($(window).scrollTop())) > parseInt($(document).height() - $(window).height()) - 300) {
+					getBrdPage($('#pageNo').val());
+				}
+			});
 		});
 
 		$('#insertBtn').on('click', function () {
@@ -34,21 +43,52 @@
 		});
 
 		function getBrdPage(pageNo) {
-			$.ajax({
-				url: '/brd/get/' + pageNo,
-				method: 'GET',
-				dataType: "json",
-				beforeSend: function () {
+			if (!isPostEnd && !isPostIng) {
+				isPostIng = true;
+				$.ajax({
+					url: '/brd/get/' + pageNo,
+					method: 'GET',
+					dataType: "json",
+					beforeSend: function () {
+					},
+					success: function (data) {
+						console.log(data);
+						$('#pageNo').val(parseInt(pageNo) + 1);
+						if (data.code == 0) {
+							var list = data.data.selectBrdByPaging;
 
-				},
-				success: function (data) {
-					console.log(data);
-					$('#pageNo').val(parseInt(pageNo) + 1);
-				},
-				complete: function () {
+							for (var i=0; i<list.length; i++) {
+								var html = '';
+								html += '	<div class="card shadow mb-3">';
+								html += '	<div class="card-body">';
+								html += '	<div class="d-flex">';
+								html += '	<div class="flex-shrink-1">';
+								html += '	<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2" width="60">';
+								html += '	</div>';
+								html += '	<div class="flex-grow-1">';
+								html += '	<h5><a href="#">' + list[i].nickname;
+								html += '<small class="text-muted">@' + list[i].userId + '</small>';
+								html += '</a></h5>';
+								html += list[i].content;
+								html += '</div>';
+								html += '</div>';
+								html += '</div>';
+								html += '</div>';
+								$('#postList').append(html);
+							}
 
-				}
-			});
+							if (list.length < 10) {
+								isPostEnd = true;
+							}
+						} else {
+							isPostEnd = true;
+						}
+					},
+					complete: function () {
+						isPostIng = false;
+					}
+				});
+			}
 		}
 	</script>
 </th:block>
@@ -121,7 +161,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 order-3 order-md-2">
+			<div class="col-md-6 order-3 order-md-2" id="postList">
 				<div class="card shadow mb-3">
 					<div class="card-body">
 						<form id="postingForm" name="postingForm">
@@ -142,120 +182,6 @@
 								</button>
 							</div>
 						</form>
-					</div>
-				</div>
-				<div class="card shadow mb-3">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
-									 width="60">
-							</div>
-							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum
-									<small class="text-muted">@LoremIpsum</small>
-								</a></h5>
-								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card shadow mb-3">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
-									 width="60">
-							</div>
-							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum
-									<small class="text-muted">@LoremIpsum</small>
-								</a></h5>
-								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card shadow mb-3">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
-									 width="60">
-							</div>
-							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum
-									<small class="text-muted">@LoremIpsum</small>
-								</a></h5>
-								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card shadow mb-3">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
-									 width="60">
-							</div>
-							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum
-									<small class="text-muted">@LoremIpsum</small>
-								</a></h5>
-								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card shadow mb-3">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-shrink-1">
-								<img src="https://picsum.photos/200/200?random" class="rounded-circle float-left mr-2"
-									 width="60">
-							</div>
-							<div class="flex-grow-1">
-								<h5><a href="#">Lorem Ipsum
-									<small class="text-muted">@LoremIpsum</small>
-								</a></h5>
-								<p>
-									"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-									exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card shadow mb-3 my-skeleton-card">
-					<div class="card-body">
-						<div class="d-flex">
-							<div class="flex-shrink-1">
-								<div class="my-skeleton my-skeleton-img mr-2"></div>
-							</div>
-							<div class="flex-grow-1">
-								<div class="d-inline-block my-skeleton my-skeleton-link"></div>
-								<div class="d-inline-block my-skeleton my-skeleton-at-mark"></div>
-								<div class="my-skeleton my-skeleton-content"></div>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>

@@ -11,18 +11,19 @@
 
 	<insert id="insertUsr" parameterType="com.l2jong.se.vo.UsrVO">
 		INSERT INTO `SE_TB_USR`
-			(`NO`, `USER_ID`, `NICKNAME`, `CREATED_AT`, `UPDATED_AT`)
-		VALUES (#{no}, #{userId}, #{nickname}, NOW(), NULL)
+			(`NO`, `USER_ID`, `NICKNAME`, `CREATED_AT`)
+		VALUES (USR_SEQ.NEXTVAL, #{userId}, #{nickname}, NOW())
 	</insert>
 
 	<select id="selectUsrByPaging" parameterType="com.l2jong.se.vo.UsrVO" resultType="com.l2jong.se.vo.UsrVO">
 		<![CDATA[
 		SELECT *
 		FROM (
-				 SELECT /*+ INDEX_DESC(Z IDX_BRD_1) */ ROWNUM AS RNUM, Z.*
+				 SELECT /*+ INDEX_DESC(Z IDX_USR_1) */ ROWNUM AS RNUM, Z.*
 				 FROM (
-						  SELECT `NO`, `USER_ID`, `NICKNAME`, `CREATED_AT`, `UPDATED_AT`
+						  SELECT `NO`, `USER_ID`, `NICKNAME`, `CREATED_AT`
 						  FROM `SE_TB_USR`
+						  ORDER BY `NO` DESC
 					  ) Z
 				 WHERE ROWNUM <= #{endRowNum}
 			 )
