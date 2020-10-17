@@ -6,3 +6,10 @@
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip();
 });
+
+
+
+function fnSearch() {
+	var searchText = $('#searchText').val();
+	window.location.href = '/search/' + searchText + "/1";
+}

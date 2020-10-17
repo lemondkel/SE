@@ -9,19 +9,10 @@
 
 <!-- main.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
-	<script src="/smarteditor2/js/service/HuskyEZCreator.js" charset="UTF-8"></script>
 	<script type="text/javascript">
 		var isPostEnd = false; // Post is ended status
 		var isPostIng = false; // Post is ing status
-		var oEditors = [];
 		$(document).ready(function () {
-			nhn.husky.EZCreator.createInIFrame({
-				oAppRef: oEditors,
-				elPlaceHolder: 'content',
-				sSkinURI: "/smarteditor2/SmartEditor2Skin.html",
-				fCreator: "createSEditor2"
-			});
-
 			getBrdPage($('#pageNo').val());
 
 			$(window).scroll(function () {
@@ -42,10 +33,11 @@
 		});
 
 		function getBrdPage(pageNo) {
+			var searchText = $('#searchText').val();
 			if (!isPostEnd && !isPostIng) {
 				isPostIng = true;
 				$.ajax({
-					url: '/brd/get/' + pageNo,
+					url: '/brd/get/' + searchText + "/" + pageNo,
 					method: 'GET',
 					dataType: "json",
 					beforeSend: function () {
@@ -81,6 +73,9 @@
 							}
 						} else {
 							isPostEnd = true;
+							if (pageNo == 1) {
+								$('#postList').append("<p>There was no result set.</p>");
+							}
 						}
 					},
 					complete: function () {
@@ -135,29 +130,11 @@
 </th:block>
 
 <div layout:fragment="content" id="writeArea">
+	<!--/*@thymesVar id="searchText" type="java.lang.String"*/-->
+	<span class="search-title" th:text="${searchText + ' result is...'}"></span>
+
 	<form name="pagingForm" id="pagingForm">
 		<input type="hidden" name="pageNo" id="pageNo" value="1"/>
 	</form>
-
-	<div class="card shadow mb-3">
-		<div class="card-body">
-			<form id="postingForm" name="postingForm">
-				<div class="form-group">
-					<textarea cols="3" name="content" id="content" rows="3"></textarea>
-				</div>
-				<div class="form-group">
-					<button class="btn btn-primary" type="button">
-						<i class="fas fa-image"
-						   data-toggle="tooltip"
-						   data-placement="top"
-						   title="Upload an image"></i>
-					</button>
-					<button class="btn btn-primary float-right" id="insertBtn" type="button"><i
-							class="fas fa-comment"></i> Post
-					</button>
-				</div>
-			</form>
-		</div>
-	</div>
 </div>
 </html>

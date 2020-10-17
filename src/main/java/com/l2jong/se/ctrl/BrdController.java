@@ -8,6 +8,7 @@ import com.l2jong.se.vo.UsrVO;
 import de.svenjacobs.loremipsum.LoremIpsum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -27,7 +28,7 @@ public class BrdController {
 
 	@RequestMapping(value = "/get/{pageNo}", method = RequestMethod.GET)
 	public AjaxResult getBrd(@PathVariable("pageNo") int pageNo) {
-		AjaxResult ajaxResult = new AjaxResult();
+		AjaxResult ajaxResult;
 
 		BrdVO brdVO = new BrdVO();
 		brdVO.setStartRowNum(1 + ((pageNo - 1) * 10));
@@ -48,7 +49,7 @@ public class BrdController {
 	}
 
 	@RequestMapping(value = "/put", method = RequestMethod.PUT)
-	public AjaxResult putBrd(@RequestBody BrdVO brdVO, HttpSession session) {
+	public AjaxResult putBrd(@ModelAttribute BrdVO brdVO, HttpSession session) {
 		AjaxResult ajaxResult;
 
 		UsrVO sessionUser = (UsrVO) session.getAttribute("se_login_user");
@@ -63,8 +64,36 @@ public class BrdController {
 		try {
 			if (resultCount > 0) {
 				ajaxResult = new AjaxResult(true, 0, "Success");
+				brdVO.setUserId(sessionUser.getUserId());
+				brdVO.setNickname(sessionUser.getNickname());
+				ajaxResult.getData().put("targetPost", brdVO);
 			} else {
 				ajaxResult = new AjaxResult(false, 1, "Data is not comitted");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ajaxResult = new AjaxResult(false, 999, "Server error");
+		}
+		return ajaxResult;
+	}
+
+	@RequestMapping("/get/{searchText}/{pageNo}")
+	public AjaxResult searchByText(HttpSession session,
+								   @PathVariable("searchText") String searchText,
+								   @PathVariable("pageNo") int pageNo) {
+		AjaxResult ajaxResult;
+
+		BrdVO brdVO = new BrdVO();
+		brdVO.setStartRowNum(1 + ((pageNo - 1) * 10));
+		brdVO.setEndRowNum(10 + ((pageNo - 1) * 10));
+		brdVO.setContent(searchText);
+		try {
+			List<BrdVO> selectBrdByPaging = brdService.selectBrdByPaging(brdVO);
+			if (selectBrdByPaging.size() > 0) {
+				ajaxResult = new AjaxResult(true, 0, "Success");
+				ajaxResult.getData().put("selectBrdByPaging", selectBrdByPaging);
+			} else {
+				ajaxResult = new AjaxResult(false, 1, "Data is empty");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,9 +115,9 @@ public class BrdController {
 		BrdVO brdVO = new BrdVO();
 		brdVO.setWriteUserNo(sessionUser.getNo());
 		int resultCount = 0;
-		for (int i=0; i<1000000; i++) {
+		for (int i = 0; i < 1000000; i++) {
 			brdVO.setContent(loremIpsum.getParagraphs());
-			System.out.println("PUT" + (i+1));
+			System.out.println("PUT" + (i + 1));
 			resultCount = brdService.insertBrd(brdVO);
 		}
 

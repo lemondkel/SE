@@ -29,6 +29,11 @@
 						  SELECT `NO`,
 								 `WRITE_USER_NO`
 						  FROM `SE_TB_BRD`
+				   		  	]]>
+							<if test="content != null">
+								WHERE CONTENT LIKE '%' || #{content} '%'
+							</if>
+							<![CDATA[
 						  ORDER BY `NO` DESC
 					  ) Z
 				 WHERE ROWNUM <= #{endRowNum}

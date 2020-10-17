@@ -45,3 +45,8 @@
 		opacity: 0.5;
 	}
 }
+
+.search-title {
+	font-size: 40px;
+	font-weight: 700;
+}

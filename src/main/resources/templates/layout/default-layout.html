@@ -4,23 +4,56 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Bamdule</title>
-
-		<!-- config fragment 사용 -->
+		<title>SNS Example</title>
 		<th:block th:replace="fragment/config :: configFragment"></th:block>
 	</head>
 
 	<body>
-		<!-- header fragment 사용 -->
 		<th:block th:replace="fragment/header :: headerFragment"></th:block>
 
-		<!--
-			content fragment 사용
-			현재 layout을 사용하는 content fragment의 내용을 삽입한다.
-		-->
-		<th:block layout:fragment="content"></th:block>
+		<div class="container-fluid mt-3">
+			<div class="row">
+				<div class="col-md-3 mb-3 order-1">
+					<div class="card shadow mb-3">
+						<img class="card-img-top" src="https://picsum.photos/800/400?image=1019">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-12">
+									<img src="https://picsum.photos/200/200?image=718"
+										 class="rounded-circle position-absolute my-pic" width="70">
+									<h5 class="mb-0"><a href="#" class="text-body">Lorem Ipsum</a></h5>
+									<h5><a href="#" class="text-body">
+										<small class="text-muted">@LoremIpsum</small>
+									</a></h5>
+								</div>
+								<div class="col-6 text-center">
+									<a href="#" class="text-body" data-toggle="tooltip" data-placement="top" title="Posts">
+										<span class="fa-layers fa-2x">
+											<i class="far fa-comment-dots"></i>
+											<span class="fa-layers-counter bg-primary fa-layers-bottom-right">123</span>
+										</span>
+									</a>
+								</div>
+								<div class="col-6 text-center">
+									<a href="#" class="text-body" data-toggle="tooltip" data-placement="top"
+									   title="Following">
+										<span class="fa-layers fa-2x">
+											<i class="fas fa-user-friends"></i>
+											<span class="fa-layers-counter bg-primary fa-layers-bottom-right">123</span>
+										</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9 order-3 order-md-2" id="postList">
+					<th:block layout:fragment="content"></th:block>
+				</div>
+			</div>
+		</div>
 
-		<!-- footer fragment 사용 -->
+
 		<th:block th:replace="fragment/footer :: footerFragment"></th:block>
 	</body>
 </html>
