@@ -13,7 +13,12 @@
 
 		<div class="container-fluid mt-3">
 			<div class="row">
-				<div class="col-md-3 mb-3 order-1">
+				<div class="col-md-12 mb-3 order-1" th:if="${session['se_login_user'] == null}">
+					<div class="card shadow mb-3">
+						<h1>SE is authorized users only.</h1>
+					</div>
+				</div>
+				<div class="col-md-3 mb-3 order-1" th:if="${session['se_login_user'] != null}">
 					<div class="card shadow mb-3">
 						<img class="card-img-top" src="https://picsum.photos/800/400?image=1019">
 						<div class="card-body">
@@ -21,9 +26,9 @@
 								<div class="col-12">
 									<img src="https://picsum.photos/200/200?image=718"
 										 class="rounded-circle position-absolute my-pic" width="70">
-									<h5 class="mb-0"><a href="#" class="text-body">Lorem Ipsum</a></h5>
+									<h5 class="mb-0"><a href="#" class="text-body" th:text="${session['se_login_user'] != null ? session['se_login_user']['nickname'] : ''}"></a></h5>
 									<h5><a href="#" class="text-body">
-										<small class="text-muted">@LoremIpsum</small>
+										<small class="text-muted" th:text="${session['se_login_user'] != null ? session['se_login_user']['userId'] : ''}"></small>
 									</a></h5>
 								</div>
 								<div class="col-6 text-center">
@@ -47,7 +52,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-9 order-3 order-md-2" id="postList">
+				<div class="col-md-9 order-3 order-md-2" id="postList" th:if="${session['se_login_user'] != null}">
 					<th:block layout:fragment="content"></th:block>
 				</div>
 			</div>

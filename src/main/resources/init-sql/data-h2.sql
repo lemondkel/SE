@@ -1,5 +1,2 @@
 SELECT 1
 FROM DUAL;
-
-INSERT INTO `SE_TB_USR`
-VALUES (1, 'l2jong', '1234', '22jong', NOW());
