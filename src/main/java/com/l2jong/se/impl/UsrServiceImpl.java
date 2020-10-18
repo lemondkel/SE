@@ -28,4 +28,19 @@ public class UsrServiceImpl implements UsrService {
 	public List<UsrVO> selectUsrByPaging(UsrVO usrVO) {
 		return usrDao.selectUsrByPaging(usrVO);
 	}
+
+	@Override
+	public boolean isExistUser(String userId) {
+		return usrDao.isExistUser(userId);
+	}
+
+	@Override
+	public String userLogin(String userPassword) {
+		return usrDao.userLogin(userPassword);
+	}
+
+	@Override
+	public UsrVO getUserInformation(String userId) {
+		return usrDao.getUserInformation(userId);
+	}
 }

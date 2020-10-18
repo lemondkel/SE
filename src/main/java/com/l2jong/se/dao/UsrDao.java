@@ -14,4 +14,10 @@ public interface UsrDao {
 	int insertUsr(UsrVO usrVO);
 
 	List<UsrVO> selectUsrByPaging(UsrVO usrVO);
+
+	boolean isExistUser(String userId);
+
+	String userLogin(String userPassword);
+
+	UsrVO getUserInformation(String userId);
 }

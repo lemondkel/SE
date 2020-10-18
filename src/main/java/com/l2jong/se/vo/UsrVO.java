@@ -13,6 +13,7 @@ public class UsrVO {
 
 	private int no;
 	private String userId;
+	private String userPassword;
 	private String nickname;
 	private Date createdAt;
 

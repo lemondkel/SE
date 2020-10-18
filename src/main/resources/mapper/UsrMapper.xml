@@ -30,4 +30,33 @@
 		WHERE RNUM >= #{startRowNum}
 		]]>
 	</select>
+
+	<select id="isExistUser" parameterType="string" resultType="boolean">
+		SELECT
+			IF(COUNT(`NO`) = 1, true, false) AS isExistUser
+		FROM
+			`SE_TB_USR`
+		WHERE
+			`USER_ID` = #{userId}
+	</select>
+
+	<select id="userLogin" resultType='string' parameterType="map">
+		SELECT
+			`USER_PASSWORD` AS user_password
+		FROM `SE_TB_USR`
+		WHERE
+			`USER_ID` = #{userId}
+	</select>
+
+	<select id="getUserInformation" resultType="com.l2jong.se.vo.UsrVO" parameterType="string">
+		SELECT
+			`NO`,
+			`USER_ID`,
+			`USER_PASSWORD`,
+			`NICKNAME`,
+			`CREATED_AT`
+		FROM `SE_TB_USR`
+		WHERE
+			`USER_ID` = #{userId}
+	</select>
 </mapper>

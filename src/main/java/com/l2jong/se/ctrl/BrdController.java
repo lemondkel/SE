@@ -134,14 +134,4 @@ public class BrdController {
 		}
 		return ajaxResult;
 	}
-
-	@RequestMapping("/login")
-	public String login() {
-		return "login";
-	}
-
-	@RequestMapping("/join")
-	public String join() {
-		return "join";
-	}
 }
